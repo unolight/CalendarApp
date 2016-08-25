@@ -1,7 +1,9 @@
 package com.example.uber;
 
+import java.util.Date;
+
 public class Event {
-	int year, month, day, startTime, endTime, alertTime;
+	Date startDate, endDate;
 	String name, type;
 	boolean alert;
 }
