@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -43,7 +44,10 @@ public class AddEventActivity extends AppCompatActivity implements AdapterView.O
     RadioGroup radioAlert;
     RadioButton radioAlertButton;
     EditText et_name;
-   
+
+    DB dbHelper;
+    SQLiteDatabase db;
+
     private Button startDateButton;
     private Button endDateButton;
     private Button startTimeButton;
@@ -66,6 +70,8 @@ public class AddEventActivity extends AppCompatActivity implements AdapterView.O
     private int mHour2, mMinute2;
     private DatePickerDialog datePickerDialog;
 
+
+
     int course_id;
 
     @Override
@@ -73,6 +79,8 @@ public class AddEventActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_event);
 
+        dbHelper = new DB(AddEventActivity.this);
+        db = dbHelper.getWritableDatabase();
         setTitle("Add New Event");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -107,8 +115,8 @@ public class AddEventActivity extends AppCompatActivity implements AdapterView.O
         mHour = calendar.get(Calendar.HOUR_OF_DAY);
         mMinute = calendar.get(Calendar.MINUTE);
 
-        mHour2 = 100;
-        mMinute2 = 100;
+        mHour2 = calendar.get(Calendar.HOUR_OF_DAY);
+        mMinute2 = calendar.get(Calendar.MINUTE);
 
         tv_start_date = (TextView) findViewById(R.id.tv_start_date);
         tv_end_date = (TextView) findViewById(R.id.tv_end_date);
@@ -130,9 +138,9 @@ public class AddEventActivity extends AppCompatActivity implements AdapterView.O
 
         endDateButton = (Button)findViewById(R.id.end_date);
         calendar2 = Calendar.getInstance();
-        mYear2 = 100;
-        mMonth2 = 100;
-        mDay2 = 100;
+        mYear2 = calendar.get(Calendar.YEAR);
+        mMonth2 = calendar.get(Calendar.MONTH);
+        mDay2 = calendar.get(Calendar.DAY_OF_MONTH);
         endDateButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -190,18 +198,39 @@ public class AddEventActivity extends AppCompatActivity implements AdapterView.O
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ContentValues values = new ContentValues();
+                // radio button
+                int selectedId = radioAlert.getCheckedRadioButtonId();
 
-            // date
+                // find the radiobutton by returned id
+                radioAlertButton = (RadioButton) findViewById(selectedId);
+                values.put("startDate", String.format("%04d/%02d/%02d %02d:%02d:00", mYear, mMonth, mDay,mHour,mMinute));
+                values.put("endDate", String.format("%04d/%02d/%02d %02d:%02d:00", mYear2, mMonth2, mDay2,mHour2,mMinute2));
+                values.put("name", et_name.getText().toString());
+                if(spinner1.getSelectedItem().toString().equals("TO DO"))
+                    values.put("type", String.format("T_%s", spinner2.getSelectedItem().toString()));
+                else
+                    values.put("type", String.format("E_%s", spinner2.getSelectedItem().toString()));
+                if(radioAlertButton.getText().toString().equals("Yes"))
+                    values.put("alert", true);
+                else
+                    values.put("alert",false);
+                if(course_id != -1)
+                    values.put("courseId", course_id);
+
+                db.insert(DB.eventTable, null, values);
+
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("ID", course_id);
+                setResult(Activity.RESULT_OK, resultIntent);
+
+                // date
                 Log.v("date", Integer.toString(mDay));
                 Log.v("date1", Integer.toString(mDay2));
             // time
                 Log.v("time", Integer.toString(mMinute));
                 Log.v("time1", Integer.toString(mMinute2));
-            // radio button
-                int selectedId = radioAlert.getCheckedRadioButtonId();
 
-                // find the radiobutton by returned id
-                radioAlertButton = (RadioButton) findViewById(selectedId);
                 Log.v("radio", radioAlertButton.getText().toString());
 
 

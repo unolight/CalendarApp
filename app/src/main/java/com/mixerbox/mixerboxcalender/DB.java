@@ -1,4 +1,4 @@
-package com.mixerbox.mixerboxcalendar;
+package com.mixerbox.mixerboxcalender;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
