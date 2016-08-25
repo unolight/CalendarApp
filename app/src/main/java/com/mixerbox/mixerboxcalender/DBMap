@@ -1,0 +1,26 @@
+db.execSQL("CREATE TABLE IF NOT EXISTS " + eventTable + " (" +
+                "_id"+ " INTEGER PRIMARY KEY," +
+                "startDate" + " DATE," +
+                "endDate" + " DATE," +
+                "alertTime" + " DATE," +
+                "name" + " TEXT," +
+                "type" + " TEXT," +
+                "alert" + " BOOLEAN" +
+                " )");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + mcTable + " (" +
+                "_id"+ " INTEGER PRIMARY KEY," +
+                "startDate" + " DATE," +
+                "endDate" + " DATE," +
+                "duration" + "INTEGER" +
+                " )");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + courseTable + " (" +
+                "_id"+ " INTEGER PRIMARY KEY," +
+                "name" + " TEXT," +
+                "day" + " INTEGER," + //1~5
+                "startSlot" + " INTEGER," +
+                "endSlot" + " INTEGER," +
+                "prof" + " TEXT," +
+                "location" + "TEXT" +
+                " )");
