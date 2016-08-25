@@ -1,20 +1,20 @@
-package com.mixerbox.mixerboxcalendar;
+package com.mixerbox.mbcalendar;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+/**
+ * Created by User on 2016/8/26.
+ */
 import java.util.Date;
 
 public class Event {
-
     Date startDate, endDate;
     int alertTime;
     String name, type;
     boolean alert;
 
-    Event(String startDate, String name) throws ParseException {
-        this.startDate = DB.dateParser.parse(startDate);
-        this.name = name;
+    public Event(String _name, Date _endDate, String _type){
+        name = _name;
+        endDate = _endDate;
+        type = _type;
     }
 
 }
