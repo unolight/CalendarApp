@@ -1,0 +1,62 @@
+private class ReadEventDB extends AsyncTask<Void, Void, ArrayList<Event>> {
+
+        @Override
+        protected ArrayList<Event> doInBackground(Void... params) {
+            DB dbHelper = new DB(MainActivity.this);
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String[] projection = {
+                    "startDate",
+                    "name" };
+            String sortOrder = "startDate" + " ASC";
+            Cursor cursor = db.query(DB.eventTable, projection,
+                    null, null, null, null, sortOrder);
+            cursor.moveToFirst();
+            int numOfRows = cursor.getCount();
+            ArrayList<Event> newEvents = new ArrayList<Event>();
+            for (int i = 0; i < numOfRows; i++) {
+                String startDate = cursor.getString(0);
+                String name = cursor.getString(1);
+                try {
+                    newEvents.add(new Event(startDate, name));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                cursor.moveToNext();
+            }
+            cursor.close();
+            return newEvents;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Event> result) {
+            events = result;
+            eventAdapter.updatePosts(result);
+        }
+    }
+
+
+    public class WriteDB extends AsyncTask<String, Void, Void> {
+
+        String startDate;
+
+        WriteDB(int y, int m, int d){
+            startDate = String.format("%04d/%02d/%02d",y,m,d);
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            DB dbHelper = new DB(MainActivity.this);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("startDate", startDate);
+            values.put("name","test");
+            db.insert(DB.eventTable, null, values);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
+
+    }
