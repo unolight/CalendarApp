@@ -1,7 +1,36 @@
 <resources>
     <string name="app_name">MixerboxCalender</string>
     <string name="add_event">Add Event</string>
+
     <string name="action_add_event">Add</string>
     <string name="action_del_event">Delete</string>
+
+    <string name="start_time">Start</string>
+    <string name="end_time">End</string>
+
+    <string name="type_prompt">Choose Type</string>
+    <string-array name="type_arrays">
+        <item>To Do</item>
+        <item>Event</item>
+    </string-array>
+
+    <!--
+
+    <string-array name="type_todo">
+        <item>Homework</item>
+        <item>Exam</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="type_event">
+        <item>Tour</item>
+        <item>Meeting</item>
+        <item>Meal</item>
+        <item>Sport</item>
+        <item>Appointment</item>
+        <item>Flight</item>
+        <item>Other</item>
+    </string-array>
+-->
 
 </resources>
